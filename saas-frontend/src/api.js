@@ -12,5 +12,5 @@ console.log(data)
 }
 export const endSubscription = (id) =>{
     console.log(id.subscription_id)
-  axios.patch(`${API_URL}/subscriptions/${id.subscription_id}/end`).then((res) => res.data);}
+  axios.delete(`${API_URL}/subscriptions/${id.subscription_id}/end`).then((res) => res.data);}
 export const fetchRevenue = () => axios.get(`${API_URL}/revenue`).then((res) => res.data);
