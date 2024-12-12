@@ -97,7 +97,7 @@ def extend_subscription(id):
 
 
 from datetime import date
-@bp.route('/subscriptions/<int:id>/end', methods=['PATCH'])
+@bp.route('/subscriptions/<int:id>/end', methods=['DELETE'])
 def end_subscription(id):
     subscription = Subscription.query.get_or_404(id)
     
