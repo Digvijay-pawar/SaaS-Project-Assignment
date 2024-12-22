@@ -11,7 +11,7 @@ import {
     endSubscription,
 } from "../api";
 
-Modal.setAppElement("#root"); // Ensure accessibility
+Modal.setAppElement("#root");
 
 const Subscriptions = () => {
     const queryClient = useQueryClient();
@@ -95,8 +95,24 @@ const Subscriptions = () => {
     };
 
     useEffect(() => {
+        if (addMutation.isSuccess) {
+            setFormData({
+                customer_id: "",
+                product_name: "",
+                no_of_users: "",
+                start_date: "",
+                end_date: "",
+            });
+        }
 
-    }, [endMutation])
+        if (extendMutation.isSuccess) {
+            setExtendData({ subscription_id: "", new_end_date: "" });
+        }
+
+        if (endMutation.isSuccess) {
+            queryClient.invalidateQueries("subscriptions");
+        }
+    }, [endMutation,extendMutation, addMutation]);
 
     if (subsLoading || customersLoading || productsLoading) return <div>Loading...</div>;
     if (subsError) return <div>Error loading subscriptions</div>;

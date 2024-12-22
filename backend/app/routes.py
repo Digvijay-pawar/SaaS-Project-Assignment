@@ -80,21 +80,34 @@ def add_subscription():
         return jsonify({"error": "Invalid date format. Use YYYY-MM-DD."}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+    
 @bp.route('/subscriptions/<int:id>', methods=['PATCH'])
 def extend_subscription(id):
     data = request.json
     subscription = Subscription.query.get_or_404(id)
-    
-    try:
+
+    try:    
         # Ensure the end_date is converted to a Python date object
-        new_end_date = datetime.strptime(data['end_date'], "%Y-%m-%d").date()
+        new_end_date = datetime.strptime(data['new_end_date'], "%Y-%m-%d").date()
+
+        # Update the subscription end date
         subscription.end_date = new_end_date
+
+        # Calculate new revenue for the subscription
+        product = Product.query.filter_by(product_name=subscription.product_name).first()
+        if not product:
+            return jsonify({"error": "Product not found"}), 404
+
+        # Calculate revenue dynamically based on the subscription duration
+        total_days = (new_end_date - subscription.start_date).days + 1
+        daily_cost = (product.annual_cost / 365) * subscription.no_of_users
+        subscription.revenue = daily_cost * total_days  # Assuming 'revenue' is a column in Subscription
+
         db.session.commit()
-        return jsonify({"message": "Subscription extended"}), 200
+        return jsonify({"message": "Subscription extended and revenue updated"}), 200
+
     except ValueError:
         return jsonify({"error": "Invalid date format. Use YYYY-MM-DD."}), 400
-
 
 from datetime import date
 @bp.route('/subscriptions/<int:id>/end', methods=['DELETE'])

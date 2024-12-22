@@ -14,8 +14,9 @@ class Product(db.Model):
 
 class Subscription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.String(50), db.ForeignKey('customer.customer_id'), nullable=False)
-    product_name = db.Column(db.String(100), db.ForeignKey('product.product_name'), nullable=False)
+    customer_id = db.Column(db.Integer, nullable=False)
+    product_name = db.Column(db.String(50), nullable=False)
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     no_of_users = db.Column(db.Integer, nullable=False)
+    # revenue = db.Column(db.Float, default=0.0)
