@@ -19,4 +19,3 @@ class Subscription(db.Model):
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
     no_of_users = db.Column(db.Integer, nullable=False)
-    # revenue = db.Column(db.Float, default=0.0)
